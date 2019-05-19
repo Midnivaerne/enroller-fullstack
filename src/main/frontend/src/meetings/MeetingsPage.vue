@@ -1,26 +1,25 @@
 <template>
-  <div>
-    <new-meeting-form @added="addNewMeeting($event)"></new-meeting-form>
+    <div>
+        <new-meeting-form @added="addNewMeeting($event)"></new-meeting-form>
 
-    <span v-if="meetings.length == 0">
+        <span v-if="meetings.length == 0">
                Brak zaplanowanych spotkań.
            </span>
-    <h3 v-else>
-      Zaplanowane zajęcia ({{ meetings.length }})
-    </h3>
+        <h3 v-else>
+            Zaplanowane zajęcia ({{ meetings.length }})
+        </h3>
 
-    <meetings-list :meetings="meetings"
-                   :username="username"
-                   @attend="addMeetingParticipant($event)"
-                   @unattend="removeMeetingParticipant($event)"
-                   @delete="deleteMeeting($event)"></meetings-list>
-  </div>
+        <meetings-list :meetings="meetings"
+                       :username="username"
+                       @attend="addMeetingParticipant($event)"
+                       @unattend="removeMeetingParticipant($event)"
+                       @delete="deleteMeeting($event)"></meetings-list>
+    </div>
 </template>
 
 <script>
     import NewMeetingForm from "./NewMeetingForm";
     import MeetingsList from "./MeetingsList";
-
     export default {
         components: {NewMeetingForm, MeetingsList},
         props: ['username'],

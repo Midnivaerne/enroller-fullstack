@@ -3,9 +3,14 @@
     <form @submit.prevent="addNewMeeting()" v-if="adding">
       <h3>Dodaj nowe spotkanie</h3>
       <label>Nazwa</label>
-      <input type="text" v-model="newMeeting.name">
+      <input type="text" v-model="newMeeting.title">
+
       <label>Opis</label>
       <textarea v-model="newMeeting.description"></textarea>
+
+      <label>Data</label>
+      <input type="date" v-model="newMeeting.date"></textarea>
+
       <button>Dodaj</button>
       <span class="error" v-if="error">Spotkanie musi mieć nazwę!</span>
     </form>
@@ -14,27 +19,34 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                newMeeting: {participants: []},
-                adding: false,
-                error: false
-            };
-        },
-        methods: {
-            addNewMeeting() {
-                this.error = false;
-                if (this.newMeeting.name) {
-                    this.$emit('added', this.newMeeting);
-                    this.newMeeting = {participants: []};
-                    this.adding = false;
-                } else {
-                    this.error = true;
-                }
-            }
+  export default {
+    data() {
+      return {
+        newMeeting: {participants: []},
+        adding: false,
+        error: false
+      };
+    },
+    methods: {
+      addNewMeeting(newMeeting) {
+        this.error = false;
+        if (this.newMeeting.title) {
+          this.$emit('added', this.newMeeting);
+          this.adding = false;
+          this.clearMessage();
+          this.$http.post('meetings', this.newMeeting).then(() => {
+            this.success('Spotkanie zostało dodane.');
+          })
+                  .catch(response => this.failure('Błąd przy dodawaniu spotkania. Kod odpowiedzi: ' + response.status));
+        } else {
+          this.error = true;
         }
+      },
+      clearMessage() {
+        this.message = undefined;
+      }
     }
+  }
 </script>
 
 <style scoped>
